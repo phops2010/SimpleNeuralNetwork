@@ -38,8 +38,9 @@ Call the former 2 things in a loop, keeping track of the error to get the networ
 
 ## Requirements
 
+    python3
     numpy
 
 ## Example
 
-run 'nn_function_estimator.py' to see an example of a neural network training itself to represent a function
+run `python3 nn_function_estimator.py` to see an example of a neural network training itself to represent a function
