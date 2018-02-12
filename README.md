@@ -38,7 +38,7 @@ Call the former 2 things in a loop, keeping track of the error to get the networ
 
 ## Requirements
 
-    'numpy'
+    numpy
 
 ## Example
 
