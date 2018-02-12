@@ -1,14 +1,14 @@
-# SimpleNeuralNetwork
+# Simple Neural Network
 
 ## Description
-Basic python building blocks for neural networks
+Python implemenation of basic building blocks for neural networks
 
-This simple neural network Module that can be used to learn about how neural networks work. Please feel free
-to modify anything you see, as this is a very simple module. Its not intended to be used for any hardcore deep learning,
-and not robust enough to handle erroneous outputs. It is however fully functional and can be used to train neural networks.
+This module  can be used to learn about how neural networks work. Please feel free to modify it for your own use.
+Its not intended to be used for any hardcore deep learning, and not robust enough(yet) to handle erroneous usage.
+It is however fully functional and can be used to train any neural networks, albeit slower than a C implementation
 
 
-Uses the following objects that can be used to programmatically built neural networks:
+Uses the following objects that can be used to programmatically build neural networks:
 
  - `InputSource`: single input source to the neural network
  - `LayerBias`: sinlge input source to the neural network that allways has a value of 1.0. Used for biasing a neuron output
@@ -43,4 +43,5 @@ Call the former 2 things in a loop, keeping track of the error to get the networ
 
 ## Example
 
-run `python3 nn_function_estimator.py` to see an example of a neural network training itself to represent a function
+run `python3 nn_function_estimator.py` to see an example of a neural network training itself to represent a function. 
+Requires `matplotlib`
