@@ -24,7 +24,7 @@ or set to true to evaluate the derivative of the activation function used for ba
 
 The way to create a neural network using this module is:
 
-1. Set up the `InputSource` objects and a single Bias ojbec
+1. Set up the `InputSource` objects and a single Bias object. 
 2. Create your hidden layer with an array of `Neuron` objects.
 3. For each neuron of the hidden layer, use the `add_child` function to add as the inputs and bias object 
    as children with inital weights
