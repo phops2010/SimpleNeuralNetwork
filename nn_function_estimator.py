@@ -53,7 +53,8 @@ for v in range(0,100000):
         plt.plot(px,py)
         plt.plot(px,ey)
         print(v)
-        fig.canvas.draw()      
+        fig.canvas.draw()
+        plt.pause(.0001) #prevents the plot from freezing on lost focus      
    
     #pick a random domain point to simulate a data point
     ival = rd.rand()*5.0
@@ -70,12 +71,5 @@ for v in range(0,100000):
  
 
 #show the final plot
-for idx,x in enumerate(px):
-    input1.set_value(x)
-    ey[idx] = Out.compute_output()
-
-fig = plt.figure()
-plt.plot(px,py)
-plt.plot(px,ey)
-plt.show()
+plt.show(block=True)
    

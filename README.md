@@ -7,6 +7,7 @@ This module  can be used to learn about how neural networks work. Please feel fr
 Its not intended to be used for any hardcore deep learning, and not robust enough(yet) to handle erroneous usage.
 It is however fully functional and can be used to train any neural networks, albeit slower than a C implementation
 
+Python docstrings are provided for all modules, so you can use the `help` function to get more info. 
 
 Uses the following objects that can be used to programmatically build neural networks:
 
