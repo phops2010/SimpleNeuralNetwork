@@ -2,6 +2,7 @@ import numpy as np
 from numpy import random as rd
 import time
 import SimpleNN as snn
+import SimpleNN.NetVisuals as nv
 
 import matplotlib.pyplot as plt
 
@@ -29,6 +30,9 @@ for cn in hidden_layer:
     
 Out = snn.OutputSink(on)
 
+dp = nv.NNPlotter([Out])
+
+
 #plot the inital estimate
 ey = np.zeros(len(py))
 for idx,x in enumerate(px):
@@ -39,8 +43,7 @@ fig = plt.figure()
 plt.plot(px,py)
 plt.plot(px,ey)
 plt.show(block=False)
-
-
+plt.ion()
 #iterate a bunch
 for v in range(0,100000):
 
@@ -53,7 +56,12 @@ for v in range(0,100000):
         plt.plot(px,py)
         plt.plot(px,ey)
         print(v)
-        fig.canvas.draw()      
+
+        fig.canvas.flush_events() #updates plot without blocking
+        time.sleep(.0001) 
+
+        dp.update_limits()  #updates nn plot 
+        dp.update_plot()   
    
     #pick a random domain point to simulate a data point
     ival = rd.rand()*5.0
@@ -70,12 +78,5 @@ for v in range(0,100000):
  
 
 #show the final plot
-for idx,x in enumerate(px):
-    input1.set_value(x)
-    ey[idx] = Out.compute_output()
-
-fig = plt.figure()
-plt.plot(px,py)
-plt.plot(px,ey)
-plt.show()
+plt.show(block=True)
    
