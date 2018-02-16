@@ -232,6 +232,23 @@ def act_RELU(val,dv=False):
         else:
             return 0
 
+def act_RELU_safe(val,dv=False):
+    """
+    Rectified Linear Unit activation with safe negative space for recovery
+
+    specify dv to true to compute the derivative of the function
+    """
+    if dv:
+        if val>0.0:
+            return 1
+        else:
+            return .01
+    else:
+        if val>0.0:
+            return(val)
+        else:
+            return 0.01*val
+
 
 def act_Linear(val, dv=False):
     """
