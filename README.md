@@ -37,6 +37,8 @@ Training the network through 1 epoch with backpropagation is done by calling `tr
 
 Call the former 2 things in a loop, keeping track of the error to get the network to converge on a target
 
+Now has a visualization module for drawing neural network plots. 
+
 ## Requirements
 
     python3
@@ -46,3 +48,5 @@ Call the former 2 things in a loop, keeping track of the error to get the networ
 
 run `python3 nn_function_estimator.py` to see an example of a neural network training itself to represent a function. 
 Requires `matplotlib`
+
+
