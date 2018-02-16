@@ -10,28 +10,25 @@ ina = snn.InputSource(0.0)
 inb = snn.InputSource(0.0)
 bs = snn.LayerBias()
 
-h1 = snn.Neuron(snn.act_RELU_safe,.1)
-h1.add_child(ina,rd.rand()/10.0-.05)
-h1.add_child(inb,rd.rand()/10.0-.05)
-h1.add_child(bs,rd.rand()/10.0-.05)
-
-h2 = snn.Neuron(snn.act_RELU_safe,.1)
-h2.add_child(ina,rd.rand()/10.0-.05)
-h2.add_child(inb,rd.rand()/10.0-.05)
-h2.add_child(bs,rd.rand()/10.0-.05)
+hl = []
+for n in range(0,16):
+    hl.append(snn.Neuron(snn.act_RELU_safe,.1))
+    hl[-1].add_child(ina,rd.rand())
+    hl[-1].add_child(inb,rd.rand())
+    hl[-1].add_child(bs,rd.rand())
 
 on = snn.Neuron(snn.act_Sigmoid,.1)
-on.add_child(h1,rd.rand()/10.0-.05)
-on.add_child(h2,rd.rand()/10.0-.05)
-on.add_child(bs,rd.rand()/10.0-.05)
+for cn in hl:
+    on.add_child(cn,rd.rand()/10-0.5)
 
 out = snn.OutputSink(on)
+
 
 vis = nv.NNPlotter([out],[-10,10])
 
 
 tidx = 0
-for v in range (0,15000):
+for v in range (0,50000):
     if (v%100) == 0:
         print(v)
         vis.update_plot()
@@ -60,7 +57,4 @@ for tidx in range(0,4):
     print("{:f},{:f} -> {:f}".format(v1,v2,val))
 
 
-print(on.weights)
-print(h1.weights)
-print(h2.weights)
 vis.persist_plot()
