@@ -37,7 +37,10 @@ Training the network through 1 epoch with backpropagation is done by calling `tr
 
 Call the former 2 things in a loop, keeping track of the error to get the network to converge on a target
 
-Now has a visualization module for drawing neural network plots. 
+Has a visualization module for drawing neural network plots.
+
+Added a `SoftMaxClassifier` class for performing classifications on data set. Its currently somewhat standalone, but I will figure out how to
+hook it up to the other classes better.  
 
 ## Requirements
 
@@ -46,7 +49,7 @@ Now has a visualization module for drawing neural network plots.
 
 ## Example
 
-run `python3 nn_function_estimator.py` to see an example of a neural network training itself to represent a function. 
+run any of the files  to see an example of training. 
 Requires `matplotlib`
 
 

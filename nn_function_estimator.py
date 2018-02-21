@@ -20,11 +20,11 @@ input1 = snn.InputSource(0)
 
 hidden_layer = []
 for k in range(0,10):
-    hidden_layer.append(snn.Neuron(snn.act_Sigmoid,.1))
+    hidden_layer.append(snn.Neuron(snn.act_Sigmoid,.05))
     hidden_layer[-1].add_child(input1,rd.rand()*10-5)
     hidden_layer[-1].add_child(bias,rd.rand()*10-5)
 
-on=snn.Neuron(snn.act_Linear,.1)
+on=snn.Neuron(snn.act_Linear,.05)
 for cn in hidden_layer:
     on.add_child(cn,rd.rand()*5.0-2.5)
     
@@ -71,10 +71,10 @@ for v in range(0,100000):
 
     #compute the output
     input1.set_value(ival)
-    Out.compute_output()
+    val = Out.compute_output()
 
     #train the network
-    Out.train_children(tval)
+    Out.train_children(-(tval-val))
  
 
 #show the final plot

@@ -83,21 +83,24 @@ class InputSource(object):
 
 class LayerBias(object):
     """
-    Bias source for the network. You can also use a Input Source with a value of 1.0, but this helps distinguish
+    Bias source for the network. You can also use a Input Source with a constant value, but this helps distinguish
     the bias from the real inputs
     """
-    def __init__(self):
+    def __init__(self,value=1.0):
         """
-        Does nothing
+        Initializes a bias. Default value is 1.0
+
+            value: bias value
         """
-        pass
+        self.value = value
+
     def compute_output(self):
         """
-        Always returns 1.0
+        Returns the bias value
 
-        return: 1.0
+            return: bias value
         """
-        return 1.0
+        return self.value
 
     def train_and_propagate(self,de_do):
         """
@@ -131,18 +134,19 @@ class OutputSink(object):
         return np.copy(self.state)
 
     #trains the network
-    def train_children(self,target):
+    def train_children(self,error_gradient):
         """
         Trains the output neuron with backpropagation for a given target value 
 
-            target: target value to train.  
+            error_gradient: error gradient to train on
         """
-        self.target = target
+        self.gradient = error_gradient
         if not self.state:
             self.state = self.source_neuron.compute_output()
-        de_do = -(target-self.state) #compute the derivative of error with respect to output
-        self.source_neuron.train_and_propagate(de_do) #start the backpropagation
+        self.source_neuron.train_and_propagate(self.gradient) #start the backpropagation
     
+    def get_state(self):
+        return np.copy(self.state)
 
 
 class Neuron(object):
@@ -214,7 +218,98 @@ class Neuron(object):
         for idx,tn in enumerate(self.child_neurons):
             de_do_prop = de_do * do_ds * self.weights[idx] # de/do_hidden = de/dout * dout/dsuminputs * dsuminptus/doutputhidden
             tn.train_and_propagate(de_do_prop)
+
+class SoftMaxClassifier(object):
+    """
+    Softmax Classifier. This is made as a separate class because it varies in computation from traditional
+    back propagation.
+
+    It is composed of a single hidden layer of RELU units, feeding into a softmax classifier neuron for each group
+    """
+    def __init__(self,input_size,hidden_size,n_groups,reg=0.001,lr=1):
+        """
+        Initialize the classifer
+
+            input_size: dimention of the input
+            hidden_size: number of hidden neurons
+            n_groups: number of output groups
+            reg: regulation parameter
+            lr: learning step size
+        """
+        self.s_in = input_size
+        self.s_h = hidden_size
+        self.s_g = n_groups
+
+        #initalize the weights. rows are the input sources, columns are the index of the next neuron in line
+        self.w_hidden = 0.01*np.random.randn(self.s_in,self.s_h)
+        self.w_output = 0.01*np.random.randn(self.s_h,self.s_g)
+        self.b_h = np.zeros((1,self.s_h)) # bias weights for hidden layer
+        self.b_o = np.zeros((1,self.s_g)) # bias weights for output layer
+
+        self.reg = reg
+        self.step = lr
+
         
+    
+    def train_step(self,point_set,group_index):
+        """
+        Performs a single training step 
+
+            point_set: input data set. Number of columns must match input_size parameter when the classifier is created
+            group_index: vector of group membership for each point in range 0,n_roups. Must match the rows of point_set
+
+        """
+        npoints = point_set.shape[0]
+        #compute the hidden layer output. 
+        h_state = np.maximum(0,np.dot(point_set,self.w_hidden)+self.b_h)
+        o_state = np.dot(h_state,self.w_output)+self.b_o
+
+        #compute the output_probs. This is the softmax classifer
+        numerator = np.exp(o_state)
+        denomenator = np.sum(numerator, axis=1, keepdims=True) #sum over the output of the group classifiers
+        probs = numerator/denomenator 
+        
+        #backprobagate the error
+        dE = probs
+        dE[range(npoints),group_index] -= 1.0
+        dE = dE/npoints
+        
+        #adjust the weights of the output
+        d_w_output = self.step*(np.dot(h_state.T,dE) + (self.reg * self.w_output))
+        d_b_output = self.step*np.sum(dE,axis = 0,keepdims=True) #bias trainig is summing the error over each point
+
+        #adjust the weights of the hidden
+        dE_hidden = np.dot(dE,self.w_output.T)
+        dE_hidden[h_state <= 0 ] = 0 #eliminate the non activated neurons
+
+        d_w_hidden = self.step*(np.dot(point_set.T,dE_hidden) + (self.reg * self.w_hidden))
+        d_b_hidden = self.step*np.sum(dE_hidden,axis = 0,keepdims=True) 
+
+        self.w_hidden -= d_w_hidden
+        self.b_h -= d_b_hidden
+        
+        self.w_output -= d_w_output
+        self.b_o -= d_b_output
+
+         
+
+    def classify(self,point_set):
+        """
+        Classifies the points
+
+            point_set: input data set. Number of columns must match input_size parameter when the classifier is created
+            
+            return: vector of groups to classify_
+        """
+        npoints = point_set.shape[0]
+        h_state = np.maximum(0,np.dot(point_set,self.w_hidden)+self.b_h)
+        o_state = np.dot(h_state,self.w_output)+self.b_o
+        c_vec = np.argmax(o_state,axis=1)
+        c_vec.reshape((npoints,1))
+        return c_vec
+    
+
+
 def act_RELU(val,dv=False):
     """
     Rectified Linear Unit activation. y=x for x>0, y=0 for x<0
@@ -275,7 +370,7 @@ def act_Sigmoid(val, dv=False):
 
         
 
-    
+ 
         
 
     

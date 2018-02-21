@@ -41,7 +41,7 @@ for v in range (0,50000):
     inb.set_value(v2)
 
     val = out.compute_output()
-    out.train_children(tgt)
+    out.train_children(-(tgt-val))
 
     tidx += 1
     if tidx > 3:
