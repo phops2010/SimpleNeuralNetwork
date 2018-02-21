@@ -299,7 +299,7 @@ class SoftMaxClassifier(object):
 
             point_set: input data set. Number of columns must match input_size parameter when the classifier is created
             
-            return: vector of groups to classify_
+            return: vector of group membership for each point
         """
         npoints = point_set.shape[0]
         h_state = np.maximum(0,np.dot(point_set,self.w_hidden)+self.b_h)
