@@ -1,7 +1,7 @@
 # Simple Neural Network
 
 ## Description
-Python implemenation of basic building blocks for neural networks
+Python implemenation of basic building blocks for neural networks.
 
 This module  can be used to learn about how neural networks work. Please feel free to modify it for your own use.
 Its not intended to be used for any hardcore deep learning, and not robust enough(yet) to handle erroneous usage.
