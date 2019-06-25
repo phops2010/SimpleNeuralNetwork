@@ -39,8 +39,7 @@ Call the former 2 things in a loop, keeping track of the error to get the networ
 
 Has a visualization module for drawing neural network plots.
 
-Added a `SoftMaxClassifier` class for performing classifications on data set. Its currently somewhat standalone, but I will figure out how to
-hook it up to the other classes better.  
+Added a `SoftMaxClassifier` class for performing classifications on data sets. Its currently somewhat standalone, doesnt fit into the other classes, but maybee I will figure out how to hook it up to the other classes better.  
 
 ## Requirements
 
